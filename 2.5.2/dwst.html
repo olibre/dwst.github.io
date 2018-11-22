@@ -13,10 +13,10 @@
 -->
 <html lang="en" class="dwst-debug">
 <head>
-  <meta http-equiv="Content-Security-Policy" content="default-src; img-src 'self' https://www.google-analytics.com; script-src 'self' 'unsafe-inline' https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; manifest-src 'self'; connect-src *;" />
+  <!--meta http-equiv="Content-Security-Policy" content="default-src; img-src 'self' https://www.google-analytics.com; script-src 'self' 'unsafe-inline' https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; manifest-src 'self'; connect-src *;" /-->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#222" />
-  <base href="/2.5.2/" />
+  <base href="/directory/to/my/path/Desktop/dwst.github.io-master/2.5.2/" />
   <link rel="manifest" href="manifest.json" />
   <title>Dark WebSocket Terminal</title>
   <link rel="preload" href="styles/dwst.css" as="style" />
@@ -61,7 +61,7 @@
     <input id="file1" type="file" />
   </div>
   <script src="scripts/dwst.js" charset="UTF-8"></script>
-  <script>
+  <!--script>
     if (self.origin.startsWith('https://dwst.github.io')) {
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -71,6 +71,6 @@
       ga('create', 'UA-103558597-1', 'auto');
       ga('send', 'pageview');
     }
-  </script>
+  </script-->
 </body>
 </html>
