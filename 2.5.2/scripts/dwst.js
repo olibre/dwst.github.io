@@ -1686,16 +1686,40 @@ var Terminal = function () {
   }, {
     key: 'blog',
     value: function blog(buffer, type) {
-      var msg = '<' + buffer.byteLength + 'B of binary data>';
-      var hd = this._hexdump(buffer);
-      var hexLines = hd.map(function (line) {
-        return {
-          type: 'hexline',
-          text: line.text,
-          hexes: line.hexes
-        };
-      });
-      this.mlog([msg].concat(hexLines), type);
+	  function _buffer_to_text(buffer) {
+		var dv = new DataView(buffer);
+		var textLines = '';
+		for (var i = 0; i < buffer.byteLength; i++) {
+			var oneByte = dv.getUint8(i);
+			if (oneByte < 0x20 || 0x7e < oneByte)
+				throw new TypeError("non-printable byte");
+			var asChar = String.fromCharCode(oneByte);
+			textLines += asChar;
+		}
+		return textLines;
+      }
+	  function _buffer_to_hex(buffer) {
+        var hd = this._hexdump(buffer);
+        var hexLines = hd.map(function (line) {
+          return {
+            type: 'hexline',
+            text: line.text,
+            hexes: line.hexes
+          };
+        });
+		return hexLines
+	  }
+	  var msg = ''
+	  var response = ''
+	  try {
+		msg = '<' + buffer.byteLength + 'B of text data>';
+	    response = _buffer_to_text(buffer)
+	  }
+	  catch (err) {
+        msg = '<' + buffer.byteLength + 'B of binary data>';
+		response = _buffer_to_hex(buffer)
+	  }
+      this.mlog([msg].concat(response), type);
     }
   }]);
 
@@ -4038,12 +4062,14 @@ var Splash = function () {
         type: 'command',
         text: '/help'
       }, ' to see the full range of available commands']];
-      var privacyReminder = [[{
-        type: 'dwstgg',
-        text: 'Check',
-        section: '#privacy',
-        warning: true
-      }, ' privacy and tracking info']];
+      var veua_ems = [['V-EUA EMS: ', {
+        type: 'command',
+        text: '/connect ws://xxxxxxxxxxxxxx-int.eua.exch.int:8085'
+      }]];
+      var veua_cmi = [['V-EUA CMI: ', {
+        type: 'command',
+        text: '/connect ws://xxxxxxxxxxxxxx-adm.eua.exch.int:8085'
+      }]];
       var linkSection = [[{
         type: 'link',
         text: 'GitHub',
@@ -4078,9 +4104,9 @@ var Splash = function () {
           return [about, [''], statusSection, [''], helpReminder, [''], linkSection];
         }
         if (connectCommands.length > 0) {
-          return [about, [''], historySection, [''], privacyReminder, [''], helpReminder, [''], linkSection];
+          return [about, [''], historySection, [''], veua_ems, [''], veua_cmi, [''], helpReminder, [''], linkSection];
         }
-        return [about, [''], beginnerInfo, [''], privacyReminder, [''], helpReminder, [''], linkSection];
+        return [about, [''], beginnerInfo, [''], veua_ems, [''], veua_cmi, [''], helpReminder, [''], linkSection];
       }();
       this._dwst.terminal.gfx(shape, colors);
       this._dwst.terminal.mlog((_ref = []).concat.apply(_ref, _toConsumableArray(sections)), 'system');
